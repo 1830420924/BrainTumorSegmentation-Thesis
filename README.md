@@ -1,67 +1,59 @@
-# BraTS 2020 Brain Tumor Segmentation Thesis
+# BraTS 2020 脑肿瘤 MRI 分割毕业论文项目
 
-This repository contains the source code, configurations, tests, and curated baseline
-metrics for a brain-tumour segmentation thesis project based on BraTS 2020 MRI data.
-It deliberately excludes patient data, generated images, model weights, and full
-experiment artifacts.
+本仓库保存基于 BraTS 2020 MRI 数据集的脑肿瘤分割毕业论文项目源码、配置、测试和精简实验结果。
+为保护数据隐私并避免大文件上传，仓库不包含原始病例数据、生成图像、模型权重和完整实验产物。
 
-## Current status
+## 当前进度
 
-The completed baseline consists of two independent implementations:
+当前已完成两套相互独立的基线实现：
 
-- **2D baseline** (`BrainTumorSegmentation/`): FLAIR slices, whole-tumour binary
-  segmentation, and three controlled U-Net experiments.
-- **3D main baseline** (`BrainTumorSegmentation3D/`): a lightweight, single-modality
-  FLAIR 3D segmentation pipeline designed for an RTX 3060 Laptop GPU with 6 GB VRAM.
-  It trains on 3D patches and evaluates complete patient volumes with sliding-window
-  inference.
+- **2D 基线**（`BrainTumorSegmentation/`）：使用 FLAIR 二维切片进行全肿瘤二分类分割，
+  已完成三组 U-Net 对照实验。
+- **3D 主基线**（`BrainTumorSegmentation3D/`）：面向 RTX 3060 Laptop GPU（6 GB 显存）设计的
+  轻量化单模态 FLAIR 三维分割流程。训练阶段使用 3D Patch，评估阶段通过滑动窗口完成整例体数据推理。
 
-The current 3D study uses the same patient-level split as the earlier 2D study:
-258 training, 55 validation, and 56 test patients. The label is the binary whole-tumour
-mask (`seg > 0`).
+当前 3D 研究沿用 2D 项目的患者级划分：258 例训练、55 例验证、56 例测试。标签为全肿瘤二值掩膜
+（`seg > 0`）。
 
-The next planned extension is a separate four-modality lightweight 3D experiment
-(`T1`, `T1ce`, `T2`, `FLAIR`). It is not included in this baseline yet.
+下一步计划是在不影响当前基线的前提下，单独开展四模态轻量化 3D 扩展实验（`T1`、`T1ce`、`T2`、`FLAIR`）。
+该扩展尚未纳入当前基线。
 
-## Baseline results
+## 已完成的基线结果
 
-The following are the completed, single-run results retained for the thesis baseline.
+下表为当前毕业论文保留的单次训练基线结果。
 
-| Pipeline | Experiment | Test Dice | Test IoU | Notes |
+| 流程 | 实验 | 测试集 Dice | 测试集 IoU | 说明 |
 | --- | --- | ---: | ---: | --- |
-| 2D | U-Net + BCE | 0.7459 | 0.6607 | Slice-level test evaluation |
-| 2D | U-Net + BCE-Dice | 0.7536 | 0.6666 | Slice-level test evaluation |
-| 2D | Attention U-Net + BCE-Dice | 0.7578 | 0.6692 | Best 2D result |
-| 3D | U-Net + BCE | 0.8470 | 0.7491 | Patient-level complete-volume evaluation |
-| 3D | U-Net + BCE-Dice | **0.8508** | **0.7562** | Current best 3D result |
-| 3D | Attention U-Net + BCE-Dice | 0.8420 | 0.7415 | Highest recall, but lower Dice/precision |
+| 2D | U-Net + BCE | 0.7459 | 0.6607 | 切片级测试评估 |
+| 2D | U-Net + BCE-Dice | 0.7536 | 0.6666 | 切片级测试评估 |
+| 2D | Attention U-Net + BCE-Dice | 0.7578 | 0.6692 | 当前最佳 2D 结果 |
+| 3D | U-Net + BCE | 0.8470 | 0.7491 | 完整患者体积级评估 |
+| 3D | U-Net + BCE-Dice | **0.8508** | **0.7562** | 当前最佳 3D 结果 |
+| 3D | Attention U-Net + BCE-Dice | 0.8420 | 0.7415 | 召回率最高，但 Dice 与 Precision 较低 |
 
-The 2D and 3D scores must not be treated as directly comparable: the 2D pipeline
-evaluates selected tumour slices, while the 3D pipeline evaluates complete patient
-volumes. More details are in [results/baseline_metrics.md](results/baseline_metrics.md).
+2D 与 3D 的指标不能直接横向比较：2D 流程评估的是选取的含肿瘤切片，3D 流程评估的是完整患者体积。
+更多指标见 [results/baseline_metrics.md](results/baseline_metrics.md)。
 
-## Repository layout
+## 仓库结构
 
 ```text
-BrainTumorSegmentation/       # Original 2D FLAIR segmentation project
-  src/brats2d/                # 2D data, model, training and evaluation code
-  remote_support/             # Archived V100-oriented helper path; not the main baseline
+BrainTumorSegmentation/       # 原始 2D FLAIR 分割项目
+  src/brats2d/                # 2D 数据、模型、训练和评估代码
+  remote_support/             # 面向 V100 的历史辅助代码，不属于当前主基线
 
-BrainTumorSegmentation3D/     # Independent 3D lightweight baseline
-  src/brats3d/                # 3D data, model, training and evaluation code
-  tests/                      # Core unit tests
+BrainTumorSegmentation3D/     # 独立的轻量化 3D 主基线
+  src/brats3d/                # 3D 数据、模型、训练和评估代码
+  tests/                      # 核心单元测试
 
-results/                      # Small, curated result summaries safe to version
+results/                      # 可安全纳入 Git 的精简实验结果
 ```
 
-## Reproduction outline
+## 复现实验
 
-1. Obtain the BraTS 2020 training data separately; it is not distributed in this
-   repository.
-2. Create a Python environment with the dependencies listed in the relevant project's
-   `requirements.txt`.
-3. Update the data paths in the configuration file for your local machine.
-4. For the 3D baseline, run these commands from `BrainTumorSegmentation3D/`:
+1. 请自行获取 BraTS 2020 训练数据；本仓库不分发该数据集。
+2. 根据对应项目的 `requirements.txt` 创建 Python 环境。
+3. 将配置文件中的数据路径改为本机实际路径。
+4. 在 `BrainTumorSegmentation3D/` 目录中，可按以下顺序运行 3D 基线：
 
    ```powershell
    python prepare_3d_splits.py
@@ -72,11 +64,9 @@ results/                      # Small, curated result summaries safe to version
    python evaluate_3d.py --experiment unet_bce_dice
    ```
 
-See the README in each subproject for its complete workflow and configuration details.
+各子项目目录中的 README 提供了更完整的运行流程与配置说明。
 
-## What is intentionally excluded
+## 有意不纳入 Git 的内容
 
-The Git repository does not contain raw BraTS volumes, processed PNG data, generated
-manifests with local absolute paths, checkpoints, NIfTI predictions, experiment
-artifacts, local IDE settings, or virtual environments. This keeps the repository
-portable and prevents patient-data and large-file uploads.
+仓库不会包含原始 BraTS 体数据、处理后的 PNG 数据、含本机绝对路径的生成清单、权重文件、NIfTI 预测、
+完整实验产物、本地 IDE 设置或虚拟环境。这样既保持仓库可移植，也避免上传病例数据和大文件。
