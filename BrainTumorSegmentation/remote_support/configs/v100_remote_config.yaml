@@ -1,0 +1,35 @@
+paths:
+  project_root: ../..
+  processed_root: ../../data_processed
+  artifacts_root: ../../artifacts_remote
+  splits_file: ../../data_processed/splits.json
+
+dataset:
+  random_seed: 42
+
+training:
+  batch_size: 16
+  epochs: 50
+  learning_rate: 0.001
+  threshold: 0.5
+  optimizer: adam
+  num_workers: 4
+  pin_memory: true
+  base_channels: 32
+  device: auto
+  data_parallel: auto
+  gpu_ids: []
+
+evaluation:
+  preview_samples: 6
+
+experiments:
+  - name: unet_bce
+    model: unet
+    loss: bce
+  - name: unet_bce_dice
+    model: unet
+    loss: bce_dice
+  - name: attention_unet_bce_dice
+    model: attention_unet
+    loss: bce_dice

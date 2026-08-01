@@ -1,0 +1,45 @@
+paths:
+  project_root: D:/KMCU/Thesis/BrainTumorSegmentation
+  training_root: D:/KMCU/Thesis/BraTS2020_TrainingData/MICCAI_BraTS2020_TrainingData
+  validation_root: D:/KMCU/Thesis/BraTS2020_ValidationData/MICCAI_BraTS2020_ValidationData
+  processed_root: D:/KMCU/Thesis/BrainTumorSegmentation/data_processed
+  artifacts_root: D:/KMCU/Thesis/BrainTumorSegmentation/artifacts
+  splits_file: D:/KMCU/Thesis/BrainTumorSegmentation/data_processed/splits.json
+
+dataset:
+  modality: flair
+  label_suffix: seg
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  random_seed: 42
+  image_size: 256
+  keep_strategy: tumor_only
+  merged_positive_labels: [1, 2, 4]
+  preview_patient: BraTS20_Training_001
+  preview_slices: 3
+
+training:
+  batch_size: 8
+  epochs: 50
+  learning_rate: 0.001
+  threshold: 0.5
+  optimizer: adam
+  num_workers: 0
+  pin_memory: true
+  base_channels: 32
+  device: auto
+
+evaluation:
+  preview_samples: 6
+
+experiments:
+  - name: unet_bce
+    model: unet
+    loss: bce
+  - name: unet_bce_dice
+    model: unet
+    loss: bce_dice
+  - name: attention_unet_bce_dice
+    model: attention_unet
+    loss: bce_dice

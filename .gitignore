@@ -1,0 +1,40 @@
+# Raw BraTS datasets and local archives
+/BraTS2020_TrainingData/
+/BraTS2020_ValidationData/
+/brain_remote_bundle.tar
+/.tmp_pkgs/
+/.agents/
+/.codex/
+
+# Python, IDE and operating-system files
+**/.venv/
+**/venv/
+**/env/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.idea/
+**/.vscode/
+**/*.iml
+**/.run/
+.coverage
+.DS_Store
+Thumbs.db
+
+# Generated datasets, manifests, checkpoints and experiment outputs
+**/data_processed/
+**/data_processed_smoke/
+/BrainTumorSegmentation3D/data/
+**/artifacts/
+**/artifacts_smoke/
+**/artifacts_remote/
+**/checkpoints/
+**/predictions/
+**/runs/
+*.pth
+*.pt
+*.ckpt
+*.nii
+*.nii.gz
