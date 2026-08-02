@@ -27,6 +27,7 @@ Thumbs.db
 **/data_processed/
 **/data_processed_smoke/
 /BrainTumorSegmentation3D/data/
+/BrainTumorSegmentation3D_4M/data/
 **/artifacts/
 **/artifacts_smoke/
 **/artifacts_remote/
